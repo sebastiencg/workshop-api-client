@@ -1,0 +1,642 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Documentation de l'API{% endblock %}
+
+{% block body %}
+    <style>
+        body {
+            background-color: #454444; /* Fond un peu noir */
+            color: #f0f0f0; /* Texte clair pour contraste */
+        }
+        .documentation {
+            margin: 1em auto;
+            max-width: 800px;
+            width: 95%;
+            font: 16px/1.5 sans-serif;
+            background-color: #2a2a2a; /* Fond légèrement plus clair que le body */
+            padding: 20px;
+            color: #f0f0f0;
+        }
+        .documentation code {
+            background: #3a3a3a;
+            padding: 2px 6px;
+            color: #ffffff;
+        }
+        .documentation h1, .documentation h2, .documentation h3 {
+            color: #ffffff;
+        }
+        .documentation pre {
+            background: #3a3a3a;
+            padding: 1em;
+            overflow: auto;
+            color: #ffffff;
+        }
+        .documentation a {
+            color: #1e90ff;
+            text-decoration: none;
+        }
+        .documentation a:hover {
+            text-decoration: underline;
+        }
+    </style>
+
+    <div class="documentation">
+        <h1>Documentation de l'API Symfony</h1>
+
+        <p>Cette documentation couvre les différentes routes de votre API Symfony, y compris des exemples de requêtes et de réponses pour chaque endpoint.</p>
+
+        <hr>
+
+        <h2>url de base</h2>
+        <h3>https://sebastien-api.esdlyon.dev</h3>
+
+
+        <h2>Table des matières</h2>
+        <ol>
+            <li><a href="#1-authentification">1. Authentification</a>
+                <ul>
+                    <li><a href="#connexion">Connexion</a></li>
+                    <li><a href="#inscription">Inscription</a></li>
+                </ul>
+            </li>
+            <li><a href="#2-type-de-famille">2. Type de Famille</a>
+                <ul>
+                    <li><a href="#lister-les-types-de-famille">Lister les types de famille</a></li>
+                    <li><a href="#créer-un-nouveau-type-de-famille">Créer un nouveau type de famille</a></li>
+                    <li><a href="#afficher-un-type-de-famille">Afficher un type de famille</a></li>
+                    <li><a href="#modifier-un-type-de-famille">Modifier un type de famille</a></li>
+                    <li><a href="#supprimer-un-type-de-famille">Supprimer un type de famille</a></li>
+                </ul>
+            </li>
+            <li><a href="#3-fruit">3. Fruit</a>
+                <ul>
+                    <li><a href="#lister-les-fruits">Lister les fruits</a></li>
+                    <li><a href="#créer-un-nouveau-fruit">Créer un nouveau fruit</a></li>
+                    <li><a href="#afficher-un-fruit">Afficher un fruit</a></li>
+                    <li><a href="#modifier-un-fruit">Modifier un fruit</a></li>
+                    <li><a href="#supprimer-un-fruit">Supprimer un fruit</a></li>
+                </ul>
+            </li>
+            <li><a href="#4-continent">4. Continent</a>
+                <ul>
+                    <li><a href="#lister-les-continents">Lister les continents</a></li>
+                    <li><a href="#créer-un-nouveau-continent">Créer un nouveau continent</a></li>
+                    <li><a href="#afficher-un-continent">Afficher un continent</a></li>
+                    <li><a href="#modifier-un-continent">Modifier un continent</a></li>
+                    <li><a href="#supprimer-un-continent">Supprimer un continent</a></li>
+                </ul>
+            </li>
+        </ol>
+
+        <hr>
+
+        <!-- 1. Authentification -->
+        <h2 id="1-authentification">1. Authentification</h2>
+
+        <!-- Connexion -->
+        <h3 id="connexion">Connexion</h3>
+        <p><strong>URL</strong>: <code>/api/login_check</code></p>
+        <p><strong>Méthode HTTP</strong>: <code>POST</code></p>
+        <p><strong>Description</strong>: Authentifie un utilisateur et retourne un token JWT.</p>
+        <p><strong>Corps de la requête</strong>:</p>
+        <pre><code>{
+  "username": "email_de_l_utilisateur",
+  "password": "mot_de_passe"
+}</code></pre>
+        <p><strong>Exemple de requête</strong>:</p>
+        <pre><code>curl -X POST http://votre-domaine.com/api/login_check \
+     -H "Content-Type: application/json" \
+     -d '{
+           "username": "john.doe@example.com",
+           "password": "votre_mot_de_passe"
+         }'</code></pre>
+        <p><strong>Réponse réussie</strong> (HTTP 200):</p>
+        <pre><code>{
+  "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9..."
+}</code></pre>
+
+        <!-- Inscription -->
+        <h3 id="inscription">Inscription</h3>
+        <p><strong>URL</strong>: <code>/register</code></p>
+        <p><strong>Méthode HTTP</strong>: <code>POST</code></p>
+        <p><strong>Description</strong>: Crée un nouvel utilisateur.</p>
+        <p><strong>Corps de la requête</strong>:</p>
+        <pre><code>{
+  "email": "email_de_l_utilisateur",
+  "password": "mot_de_passe"
+}</code></pre>
+        <p><strong>Exemple de requête</strong>:</p>
+        <pre><code>curl -X POST http://votre-domaine.com/register \
+     -H "Content-Type: application/json" \
+     -d '{
+           "email": "john.doe@example.com",
+           "password": "monMotDePasse"
+         }'</code></pre>
+        <p><strong>Réponse réussie</strong> (HTTP 200):</p>
+        <pre><code>{
+  "message": "user create"
+}</code></pre>
+        <p><strong>Erreurs possibles</strong>:</p>
+        <ul>
+            <li><strong>400 Bad Request</strong>: Si les données fournies sont invalides ou incomplètes.
+                <pre><code>{
+  "message": "Données JSON invalides"
+}</code></pre>
+            </li>
+        </ul>
+
+        <hr>
+
+        <!-- 2. Type de Famille -->
+        <h2 id="2-type-de-famille">2. Type de Famille</h2>
+
+        <!-- Lister les types de famille -->
+        <h3 id="lister-les-types-de-famille">Lister les types de famille</h3>
+        <p><strong>URL</strong>: <code>/api/family</code></p>
+        <p><strong>Méthode HTTP</strong>: <code>GET</code></p>
+        <p><strong>Description</strong>: Récupère la liste de tous les types de famille.</p>
+        <p><strong>Exemple de requête</strong>:</p>
+        <pre><code>curl -X GET http://votre-domaine.com/api/family</code></pre>
+        <p><strong>Réponse réussie</strong> (HTTP 200):</p>
+        <pre><code>[
+  {
+    "id": 1,
+    "name": "Famille A",
+    "ofUser": {
+      "id": 1,
+      "email": "john.doe@example.com"
+    }
+  },
+  {
+    "id": 2,
+    "name": "Famille B",
+    "ofUser": {
+      "id": 2,
+      "email": "jane.doe@example.com"
+    }
+  }
+]</code></pre>
+
+        <!-- Créer un nouveau type de famille -->
+        <h3 id="créer-un-nouveau-type-de-famille">Créer un nouveau type de famille</h3>
+        <p><strong>URL</strong>: <code>/api/family/create/new</code></p>
+        <p><strong>Méthode HTTP</strong>: <code>POST</code></p>
+        <p><strong>Description</strong>: Crée un nouveau type de famille.</p>
+        <p><strong>En-têtes requis</strong>:</p>
+        <pre><code>Authorization: Bearer {token}</code></pre>
+        <p><strong>Corps de la requête</strong>:</p>
+        <pre><code>{
+  "name": "Nom de la famille"
+}</code></pre>
+        <p><strong>Exemple de requête</strong>:</p>
+        <pre><code>curl -X POST http://votre-domaine.com/api/family/create/new \
+     -H "Content-Type: application/json" \
+     -H "Authorization: Bearer votre_token_jwt" \
+     -d '{
+           "name": "Famille C"
+         }'</code></pre>
+        <p><strong>Réponse réussie</strong> (HTTP 200):</p>
+        <pre><code>{
+  "id": 3,
+  "name": "Famille C",
+  "ofUser": {
+    "id": 1,
+    "email": "john.doe@example.com"
+  }
+}</code></pre>
+        <p><strong>Erreurs possibles</strong>:</p>
+        <ul>
+            <li><strong>400 Bad Request</strong>: Si le champ <code>name</code> est vide.
+                <pre><code>{
+  "message": "name must not be empty"
+}</code></pre>
+            </li>
+        </ul>
+
+        <!-- Afficher un type de famille -->
+        <h3 id="afficher-un-type-de-famille">Afficher un type de famille</h3>
+        <p><strong>URL</strong>: <code>/api/family/{id}</code></p>
+        <p><strong>Méthode HTTP</strong>: <code>GET</code></p>
+        <p><strong>Description</strong>: Récupère les détails d'un type de famille spécifique.</p>
+        <p><strong>Exemple de requête</strong>:</p>
+        <pre><code>curl -X GET http://votre-domaine.com/api/family/1</code></pre>
+        <p><strong>Réponse réussie</strong> (HTTP 200):</p>
+        <pre><code>{
+  "id": 1,
+  "name": "Famille A",
+  "ofUser": {
+    "id": 1,
+    "email": "john.doe@example.com"
+  }
+}</code></pre>
+
+        <!-- Modifier un type de famille -->
+        <h3 id="modifier-un-type-de-famille">Modifier un type de famille</h3>
+        <p><strong>URL</strong>: <code>/api/family/{id}/edit</code></p>
+        <p><strong>Méthode HTTP</strong>: <code>POST</code></p>
+        <p><strong>Description</strong>: Modifie un type de famille existant.</p>
+        <p><strong>En-têtes requis</strong>:</p>
+        <pre><code>Authorization: Bearer {token}</code></pre>
+        <p><strong>Corps de la requête</strong>:</p>
+        <pre><code>{
+  "name": "Nouveau nom de la famille"
+}</code></pre>
+        <p><strong>Exemple de requête</strong>:</p>
+        <pre><code>curl -X POST http://votre-domaine.com/api/family/1/edit \
+     -H "Content-Type: application/json" \
+     -H "Authorization: Bearer votre_token_jwt" \
+     -d '{
+           "name": "Famille A Modifiée"
+         }'</code></pre>
+        <p><strong>Réponse réussie</strong> (HTTP 200):</p>
+        <pre><code>{
+  "id": 1,
+  "name": "Famille A Modifiée",
+  "ofUser": {
+    "id": 1,
+    "email": "john.doe@example.com"
+  }
+}</code></pre>
+        <p><strong>Erreurs possibles</strong>:</p>
+        <ul>
+            <li><strong>400 Bad Request</strong>: Si l'utilisateur n'a pas l'autorisation de modifier ce type de famille.
+                <pre><code>{
+  "message": "internal error"
+}</code></pre>
+            </li>
+        </ul>
+
+        <!-- Supprimer un type de famille -->
+        <h3 id="supprimer-un-type-de-famille">Supprimer un type de famille</h3>
+        <p><strong>URL</strong>: <code>/api/family/{id}</code></p>
+        <p><strong>Méthode HTTP</strong>: <code>POST</code></p>
+        <p><strong>Description</strong>: Supprime un type de famille.</p>
+        <p><strong>En-têtes requis</strong>:</p>
+        <pre><code>Authorization: Bearer {token}</code></pre>
+        <p><strong>Exemple de requête</strong>:</p>
+        <pre><code>curl -X POST http://votre-domaine.com/api/family/1 \
+     -H "Authorization: Bearer votre_token_jwt"</code></pre>
+        <p><strong>Réponse réussie</strong> (HTTP 400):</p>
+        <pre><code>{
+  "message": "values deleted"
+}</code></pre>
+
+        <hr>
+
+        <!-- 3. Fruit -->
+        <h2 id="3-fruit">3. Fruit</h2>
+
+        <!-- Lister les fruits -->
+        <h3 id="lister-les-fruits">Lister les fruits</h3>
+        <p><strong>URL</strong>: <code>/api/fruit</code></p>
+        <p><strong>Méthode HTTP</strong>: <code>GET</code></p>
+        <p><strong>Description</strong>: Récupère la liste de tous les fruits.</p>
+        <p><strong>Exemple de requête</strong>:</p>
+        <pre><code>curl -X GET http://votre-domaine.com/api/fruit</code></pre>
+        <p><strong>Réponse réussie</strong> (HTTP 200):</p>
+        <pre><code>[
+  {
+    "id": 1,
+    "name": "Pomme",
+    "color": "Rouge",
+    "ofUser": {
+      "id": 1,
+      "email": "john.doe@example.com"
+    },
+    "continents": [
+      {
+        "id": 1,
+        "name": "Europe"
+      }
+    ],
+    "families": [
+      {
+        "id": 1,
+        "name": "Rosaceae"
+      }
+    ]
+  }
+]</code></pre>
+
+        <!-- Créer un nouveau fruit -->
+        <h3 id="créer-un-nouveau-fruit">Créer un nouveau fruit</h3>
+        <p><strong>URL</strong>: <code>/api/fruit/create/new</code></p>
+        <p><strong>Méthode HTTP</strong>: <code>POST</code></p>
+        <p><strong>Description</strong>: Crée un nouveau fruit.</p>
+        <p><strong>En-têtes requis</strong>:</p>
+        <pre><code>Authorization: Bearer {token}</code></pre>
+        <p><strong>Corps de la requête</strong>:</p>
+        <pre><code>{
+  "name": "Nom du fruit",
+  "color": "Couleur du fruit",
+  "continents": [1, 2],
+  "families": [1]
+}</code></pre>
+        <p><strong>Exemple de requête</strong>:</p>
+        <pre><code>curl -X POST http://votre-domaine.com/api/fruit/create/new \
+     -H "Content-Type: application/json" \
+     -H "Authorization: Bearer votre_token_jwt" \
+     -d '{
+           "name": "Banane",
+           "color": "Jaune",
+           "continents": [1, 3],
+           "families": [2]
+         }'</code></pre>
+        <p><strong>Réponse réussie</strong> (HTTP 200):</p>
+        <pre><code>{
+  "id": 2,
+  "name": "Banane",
+  "color": "Jaune",
+  "ofUser": {
+    "id": 1,
+    "email": "john.doe@example.com"
+  },
+  "continents": [
+    {
+      "id": 1,
+      "name": "Afrique"
+    },
+    {
+      "id": 3,
+      "name": "Amérique du Sud"
+    }
+  ],
+  "families": [
+    {
+      "id": 2,
+      "name": "Musaceae"
+    }
+  ]
+}</code></pre>
+        <p><strong>Erreurs possibles</strong>:</p>
+        <ul>
+            <li><strong>400 Bad Request</strong>: Si le fruit est vide ou si les continents/familles fournis ne sont pas trouvés.
+                <pre><code>{
+  "message": "name must not be empty"
+}</code></pre>
+            </li>
+        </ul>
+
+        <!-- Afficher un fruit -->
+        <h3 id="afficher-un-fruit">Afficher un fruit</h3>
+        <p><strong>URL</strong>: <code>/api/fruit/{id}</code></p>
+        <p><strong>Méthode HTTP</strong>: <code>GET</code></p>
+        <p><strong>Description</strong>: Récupère les détails d'un fruit spécifique.</p>
+        <p><strong>Exemple de requête</strong>:</p>
+        <pre><code>curl -X GET http://votre-domaine.com/api/fruit/1</code></pre>
+        <p><strong>Réponse réussie</strong> (HTTP 200):</p>
+        <pre><code>{
+  "id": 1,
+  "name": "Pomme",
+  "color": "Rouge",
+  "ofUser": {
+    "id": 1,
+    "email": "john.doe@example.com"
+  },
+  "continents": [
+    {
+      "id": 1,
+      "name": "Europe"
+    }
+  ],
+  "families": [
+    {
+      "id": 1,
+      "name": "Rosaceae"
+    }
+  ]
+}</code></pre>
+        <!-- rechercher un fruit -->
+        <h3 id="afficher-un-fruit">rechercher un fruit</h3>
+        <p><strong>URL</strong>: <code>/api/fruit/search/?name=pomme</code></p>
+        <p><strong>Méthode HTTP</strong>: <code>GET</code></p>
+        <p><strong>Description</strong>: Rechercher un fruit spécifique.</p>
+        <p><strong>Exemple de requête</strong>:</p>
+        <pre><code>curl -X GET http://votre-domaine.com/api/fruit/search?name=pomme</code></pre>
+        <p><strong>Réponse réussie</strong> (HTTP 200):</p>
+        <pre><code>{
+  "id": 1,
+  "name": "Pomme",
+  "color": "Rouge",
+  "ofUser": {
+    "id": 1,
+    "email": "john.doe@example.com"
+  },
+  "continents": [
+    {
+      "id": 1,
+      "name": "Europe"
+    }
+  ],
+  "families": [
+    {
+      "id": 1,
+      "name": "Rosaceae"
+    }
+  ]
+}</code></pre>
+
+        <!-- Modifier un fruit -->
+        <h3 id="modifier-un-fruit">Modifier un fruit</h3>
+        <p><strong>URL</strong>: <code>/api/fruit/{id}/edit</code></p>
+        <p><strong>Méthode HTTP</strong>: <code>POST</code></p>
+        <p><strong>Description</strong>: Modifie un fruit existant.</p>
+        <p><strong>En-têtes requis</strong>:</p>
+        <pre><code>Authorization: Bearer {token}</code></pre>
+        <p><strong>Corps de la requête</strong>:</p>
+        <pre><code>{
+  "name": "Nouveau nom du fruit",
+  "color": "Nouvelle couleur du fruit"
+}</code></pre>
+        <p><strong>Exemple de requête</strong>:</p>
+        <pre><code>curl -X POST http://votre-domaine.com/api/fruit/1/edit \
+     -H "Content-Type: application/json" \
+     -H "Authorization: Bearer votre_token_jwt" \
+     -d '{
+           "name": "Pomme Verte",
+           "color": "Vert"
+         }'</code></pre>
+        <p><strong>Réponse réussie</strong> (HTTP 200):</p>
+        <pre><code>{
+  "id": 1,
+  "name": "Pomme Verte",
+  "color": "Vert",
+  "ofUser": {
+    "id": 1,
+    "email": "john.doe@example.com"
+  },
+  "continents": [...],
+  "families": [...]
+}</code></pre>
+        <p><strong>Erreurs possibles</strong>:</p>
+        <ul>
+            <li><strong>400 Bad Request</strong>: Si l'utilisateur n'a pas l'autorisation de modifier ce fruit ou si les données fournies sont invalides.
+                <pre><code>{
+  "message": "no authorization"
+}</code></pre>
+            </li>
+        </ul>
+
+        <!-- Supprimer un fruit -->
+        <h3 id="supprimer-un-fruit">Supprimer un fruit</h3>
+        <p><strong>URL</strong>: <code>/api/fruit/{id}</code></p>
+        <p><strong>Méthode HTTP</strong>: <code>POST</code></p>
+        <p><strong>Description</strong>: Supprime un fruit.</p>
+        <p><strong>En-têtes requis</strong>:</p>
+        <pre><code>Authorization: Bearer {token}</code></pre>
+        <p><strong>Exemple de requête</strong>:</p>
+        <pre><code>curl -X POST http://votre-domaine.com/api/fruit/1 \
+     -H "Authorization: Bearer votre_token_jwt"</code></pre>
+        <p><strong>Réponse réussie</strong> (HTTP 400):</p>
+        <pre><code>{
+  "message": "values deleted"
+}</code></pre>
+
+        <hr>
+
+        <!-- 4. Continent -->
+        <h2 id="4-continent">4. Continent</h2>
+
+        <!-- Lister les continents -->
+        <h3 id="lister-les-continents">Lister les continents</h3>
+        <p><strong>URL</strong>: <code>/api/continent</code></p>
+        <p><strong>Méthode HTTP</strong>: <code>GET</code></p>
+        <p><strong>Description</strong>: Récupère la liste de tous les continents.</p>
+        <p><strong>Exemple de requête</strong>:</p>
+        <pre><code>curl -X GET http://votre-domaine.com/api/continent</code></pre>
+        <p><strong>Réponse réussie</strong> (HTTP 200):</p>
+        <pre><code>[
+  {
+    "id": 1,
+    "name": "Afrique",
+    "ofUser": {
+      "id": 1,
+      "email": "john.doe@example.com"
+    }
+  },
+  {
+    "id": 2,
+    "name": "Europe",
+    "ofUser": {
+      "id": 2,
+      "email": "jane.doe@example.com"
+    }
+  }
+]</code></pre>
+
+        <!-- Créer un nouveau continent -->
+        <h3 id="créer-un-nouveau-continent">Créer un nouveau continent</h3>
+        <p><strong>URL</strong>: <code>/api/continent/create/new</code></p>
+        <p><strong>Méthode HTTP</strong>: <code>POST</code></p>
+        <p><strong>Description</strong>: Crée un nouveau continent.</p>
+        <p><strong>En-têtes requis</strong>:</p>
+        <pre><code>Authorization: Bearer {token}</code></pre>
+        <p><strong>Corps de la requête</strong>:</p>
+        <pre><code>{
+  "name": "Nom du continent"
+}</code></pre>
+        <p><strong>Exemple de requête</strong>:</p>
+        <pre><code>curl -X POST http://votre-domaine.com/api/continent/create/new \
+     -H "Content-Type: application/json" \
+     -H "Authorization: Bearer votre_token_jwt" \
+     -d '{
+           "name": "Asie"
+         }'</code></pre>
+        <p><strong>Réponse réussie</strong> (HTTP 200):</p>
+        <pre><code>{
+  "id": 3,
+  "name": "Asie",
+  "ofUser": {
+    "id": 1,
+    "email": "john.doe@example.com"
+  }
+}</code></pre>
+        <p><strong>Erreurs possibles</strong>:</p>
+        <ul>
+            <li><strong>400 Bad Request</strong>: Si le champ <code>name</code> est vide.
+                <pre><code>{
+  "message": "name must not be empty"
+}</code></pre>
+            </li>
+        </ul>
+
+        <!-- Afficher un continent -->
+        <h3 id="afficher-un-continent">Afficher un continent</h3>
+        <p><strong>URL</strong>: <code>/api/continent/{id}</code></p>
+        <p><strong>Méthode HTTP</strong>: <code>GET</code></p>
+        <p><strong>Description</strong>: Récupère les détails d'un continent spécifique.</p>
+        <p><strong>Exemple de requête</strong>:</p>
+        <pre><code>curl -X GET http://votre-domaine.com/api/continent/1</code></pre>
+        <p><strong>Réponse réussie</strong> (HTTP 200):</p>
+        <pre><code>{
+  "id": 1,
+  "name": "Afrique",
+  "ofUser": {
+    "id": 1,
+    "email": "john.doe@example.com"
+  }
+}</code></pre>
+
+        <!-- Modifier un continent -->
+        <h3 id="modifier-un-continent">Modifier un continent</h3>
+        <p><strong>URL</strong>: <code>/api/continent/{id}/edit</code></p>
+        <p><strong>Méthode HTTP</strong>: <code>PUT</code> ou <code>PATCH</code></p>
+        <p><strong>Description</strong>: Modifie un continent existant.</p>
+        <p><strong>En-têtes requis</strong>:</p>
+        <pre><code>Authorization: Bearer {token}</code></pre>
+        <p><strong>Corps de la requête</strong>:</p>
+        <pre><code>{
+  "name": "Nouveau nom du continent"
+}</code></pre>
+        <p><strong>Exemple de requête</strong>:</p>
+        <pre><code>curl -X PUT http://votre-domaine.com/api/continent/1/edit \
+     -H "Content-Type: application/json" \
+     -H "Authorization: Bearer votre_token_jwt" \
+     -d '{
+           "name": "Afrique Modifiée"
+         }'</code></pre>
+        <p><strong>Réponse réussie</strong> (HTTP 200):</p>
+        <pre><code>{
+  "id": 1,
+  "name": "Afrique Modifiée",
+  "ofUser": {
+    "id": 1,
+    "email": "john.doe@example.com"
+  }
+}</code></pre>
+        <p><strong>Erreurs possibles</strong>:</p>
+        <ul>
+            <li><strong>400 Bad Request</strong>: Si l'utilisateur n'a pas l'autorisation de modifier ce continent.
+                <pre><code>{
+  "message": "no authorization"
+}</code></pre>
+            </li>
+        </ul>
+
+        <!-- Supprimer un continent -->
+        <h3 id="supprimer-un-continent">Supprimer un continent</h3>
+        <p><strong>URL</strong>: <code>/api/continent/{id}</code></p>
+        <p><strong>Méthode HTTP</strong>: <code>DELETE</code></p>
+        <p><strong>Description</strong>: Supprime un continent.</p>
+        <p><strong>En-têtes requis</strong>:</p>
+        <pre><code>Authorization: Bearer {token}</code></pre>
+        <p><strong>Exemple de requête</strong>:</p>
+        <pre><code>curl -X DELETE http://votre-domaine.com/api/continent/1 \
+     -H "Authorization: Bearer votre_token_jwt"</code></pre>
+        <p><strong>Réponse réussie</strong> (HTTP 400):</p>
+        <pre><code>{
+  "message": "values deleted"
+}</code></pre>
+
+        <hr>
+
+        <p><strong>Note</strong>: Pour toutes les routes nécessitant une authentification, assurez-vous de fournir le token JWT obtenu lors de la connexion dans l'en-tête <code>Authorization</code> sous la forme <code>Bearer {token}</code>.</p>
+
+        <p>Exemple d'utilisation de l'en-tête d'autorisation:</p>
+        <pre><code>-H "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9..."</code></pre>
+
+        <hr>
+
+        <p>Cette documentation vous fournit les informations nécessaires pour interagir avec votre API Symfony, y compris des exemples de requêtes et de réponses pour chaque endpoint. N'oubliez pas de remplacer <code>sebastien-api.esdlyon.dev</code> par le domaine réel de votre application et d'utiliser les identifiants et tokens appropriés.</p>
+    </div>
+{% endblock %}

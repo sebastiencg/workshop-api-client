@@ -1,0 +1,116 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}MarketPlace index{% endblock %}
+
+{% block body %}
+    <div class="marketplace-page">
+        <h1 class="marketplace-title">MarketPlace index</h1>
+
+        <table class="table marketplace-table">
+            <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for market_place in market_places %}
+                <tr>
+                    <td>{{ market_place.id }}</td>
+                    <td>{{ market_place.name }}</td>
+                    <td>
+                        <a href="{{ path('app_market_place_show', {'id': market_place.id}) }}" class="btn btn-sm btn-info">Show</a>
+                        <a href="{{ path('app_market_place_edit', {'id': market_place.id}) }}" class="btn btn-sm btn-warning">Edit</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="3" class="text-center">No records found</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <a href="{{ path('app_market_place_new') }}" class="btn btn-primary create-new-btn">Create new</a>
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        .marketplace-page {
+            padding: 2rem;
+            background-color: #f9f9f9;
+        }
+
+        .marketplace-title {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+            color: #333;
+        }
+
+        .marketplace-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+        }
+
+        .marketplace-table th, .marketplace-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .marketplace-table th {
+            background-color: #f1f1f1;
+            font-weight: bold;
+        }
+
+        .marketplace-table tr:hover {
+            background-color: #f9f9f9;
+        }
+
+        .marketplace-table td .btn {
+            margin-right: 0.5rem;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            color: #fff;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .btn-info {
+            background-color: #007bff;
+        }
+
+        .btn-warning {
+            background-color: #ffc107;
+        }
+
+        .btn-info:hover, .btn-warning:hover {
+            opacity: 0.8;
+        }
+
+        .create-new-btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background-color: #28a745;
+            color: #fff;
+            border-radius: 4px;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .create-new-btn:hover {
+            background-color: #218838;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+    </style>
+{% endblock %}

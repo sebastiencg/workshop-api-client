@@ -1,0 +1,71 @@
+{# new.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}New MarketPlace{% endblock %}
+
+{% block body %}
+    <div class="marketplace-create-page">
+        <div class="marketplace-create-container">
+            <h1 class="marketplace-title">Create New MarketPlace</h1>
+
+            {{ include('market_place/_form.html.twig', {'button_label': 'Save'}) }}
+
+            <a href="{{ path('app_market_place_index') }}" class="btn btn-secondary">Back to list</a>
+        </div>
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        .marketplace-create-page {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f0f0f0;
+        }
+
+        .marketplace-create-container {
+            width: 100%;
+            max-width: 500px;
+            padding: 2rem;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .marketplace-title {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+            color: #333;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: #fff;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 1rem;
+        }
+
+        .btn-primary:hover, .btn-secondary:hover {
+            opacity: 0.9;
+        }
+    </style>
+{% endblock %}
