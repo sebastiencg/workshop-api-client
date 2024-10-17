@@ -37,18 +37,19 @@ class ClientApiController extends AbstractController
         $json = $request->getContent();
         $data = json_decode($json, true);
 
-        if (!isset($data['API_key'])) {
+        if (!isset($data['api_key'])) {
             return $this->json(['message' => "API_key no send"], Response::HTTP_BAD_REQUEST);
         }
         if (!isset($data['email'])) {
             return $this->json(['message' => "email no send"], Response::HTTP_BAD_REQUEST);
         }
-        if (!isset($data['total_request'])) {
+        if (!isset($data['count'])) {
             return $this->json(['message' => "total request  no send"], Response::HTTP_BAD_REQUEST);
         }
         if (!isset($data['uuid'])) {
             return $this->json(['message' => "uuid no send"], Response::HTTP_BAD_REQUEST);
         }
+        //client_id
         $checkUuid= Uuid::isValid($data['uuid']);
         if (!$checkUuid) {
             return $this->json(['message' => "uuid invalid"], Response::HTTP_BAD_REQUEST);
@@ -69,10 +70,9 @@ class ClientApiController extends AbstractController
 
     }
 
-    #[Route('/client-api/revoke', name: 'app_client_api_revoke',methods: ['DELETE'])]
-    public function revoke(ClientApiRepository $clientApiRepository,Request $request,EntityManagerInterface $entityManager,CheckApiKeyMarketPlaceService $service ): Response
+    #[Route('/client-api/{uuid}', name: 'app_client_api_revoke',methods: ['DELETE'])]
+    public function revoke(ClientApiRepository $clientApiRepository,Request $request,EntityManagerInterface $entityManager,CheckApiKeyMarketPlaceService $service , string $uuid): Response
     {
-
 
         $apiKeyMarketPlace = $request->headers->get('API-Key-Plat');
         if(!$apiKeyMarketPlace){
@@ -82,7 +82,7 @@ class ClientApiController extends AbstractController
             if(!$marketPlace){
                 return $this->json(['message' => "MarketPlace unknown"], Response::HTTP_BAD_REQUEST);
             }
-            $uuidQuery = $request->query->get('uuid');
+            $uuidQuery = $uuid;
 
             if (!$uuidQuery) {
                 return $this->json(['message' => "uuid no send"], Response::HTTP_BAD_REQUEST);
@@ -105,37 +105,40 @@ class ClientApiController extends AbstractController
 
         }
     }
-
-    #[Route('/client-api/info', name: 'app_client_api_info',methods: ['GET'])]
-    public function info(ClientApiRepository $clientApiRepository,Request $request,MarketPlaceRepository $marketPlaceRepository ,EntityManagerInterface $entityManager,CheckApiKeyMarketPlaceService $service): Response
-    {
+    #[Route('/client-api/{uuid}', name: 'app_client_api_info', methods: ['GET'])]
+    public function info(ClientApiRepository $clientApiRepository, Request $request, CheckApiKeyMarketPlaceService $service, string $uuid): Response {
         $apiKeyMarketPlace = $request->headers->get('API-Key-Plat');
-        if(!$apiKeyMarketPlace){
+        if (!$apiKeyMarketPlace) {
             return $this->json(['message' => "MarketPlace unknown"], Response::HTTP_BAD_REQUEST);
-        }else{
-            $marketPlace = $service->checkKey($apiKeyMarketPlace);
-            if(!$marketPlace){
-                return $this->json(['message' => "MarketPlace unknown"], Response::HTTP_BAD_REQUEST);
-            }
-            $uuidQuery = $request->query->get('uuid');
+        }
 
-            if (!$uuidQuery) {
-                return $this->json(['message' => "uuid no send"], Response::HTTP_BAD_REQUEST);
-            }
+        $marketPlace = $service->checkKey($apiKeyMarketPlace);
+        if (!$marketPlace) {
+            return $this->json(['message' => "MarketPlace unknown"], Response::HTTP_BAD_REQUEST);
+        }
 
-            $checkUuid= Uuid::isValid($uuidQuery);
+        $checkUuid = Uuid::isValid($uuid);
+        if (!$checkUuid) {
+            return $this->json(['message' => "uuid invalid"], Response::HTTP_BAD_REQUEST);
+        }
 
-            if (!$checkUuid) {
-                return $this->json(['message' => "uuid invalid"], Response::HTTP_BAD_REQUEST);
-            }
+        $uuidObj = Uuid::fromString($uuid);
+        $clientApi = $clientApiRepository->findOneBy(['Uuid' => $uuidObj]);
 
-            $uuid = Uuid::fromString($uuidQuery);
+        if (!$clientApi) {
+            return $this->json(['message' => "Client not found"], Response::HTTP_NOT_FOUND);
+        }
 
-            $clientApi = $clientApiRepository->findOneBy(['Uuid'=>$uuid,]);
+        // Convert the clientApi to an array and rename 'requestQuota' to 'count'
+        $clientApiData = [
+            'email' => $clientApi->getEmail(),
+            'Uuid' => $clientApi->getUuid(),
+            'totalCount' => $clientApi->getTotalRequest(),
+            'count' => $clientApi->getRequestQuota() // Rename requestQuota to count
+        ];
 
-            return $this->json($clientApi, Response::HTTP_OK, [], ['groups' => 'marketPlace:show-client']);
-
-
+        return $this->json($clientApiData, Response::HTTP_OK, [], ['groups' => 'marketPlace:show-client']);
     }
-    }
+
+
 }
