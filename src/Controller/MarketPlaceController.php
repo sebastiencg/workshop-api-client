@@ -14,7 +14,7 @@ use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/market-place')]
+#[Route('/admin/market-place')]
 final class MarketPlaceController extends AbstractController
 {
     #[Route(name: 'app_market_place_index', methods: ['GET'])]
