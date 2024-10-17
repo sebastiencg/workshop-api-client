@@ -9,11 +9,16 @@
         <div class="marketplace-create-container">
             <h1 class="marketplace-title">Create New MarketPlace</h1>
 
-            {{ include('market_place/_form.html.twig', {'button_label': 'Save'}) }}
+            <div class="form-container">
+                {{ include('market_place/_form.html.twig', {'button_label': 'Save'}) }}
+            </div>
 
-            <a href="{{ path('app_market_place_index') }}" class="btn btn-secondary">Back to list</a>
+            <div class="buttons-container">
+                <a href="{{ path('app_market_place_index') }}" class="btn btn-secondary">Back to list</a>
+            </div>
         </div>
     </div>
+
 {% endblock %}
 
 {% block stylesheets %}
@@ -22,50 +27,82 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            background-color: #f0f0f0;
+            height: 100vh;
+            background-color: #f4f4f9;
         }
 
         .marketplace-create-container {
             width: 100%;
-            max-width: 500px;
-            padding: 2rem;
+            max-width: 800px;
             background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
 
         .marketplace-title {
             text-align: center;
-            margin-bottom: 1.5rem;
-            font-size: 1.8rem;
+            font-size: 2rem;
+            font-weight: bold;
             color: #333;
+            margin-bottom: 20px;
+        }
+
+        .form-container {
+            margin-bottom: 20px;
+        }
+
+        .form-container form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-container input, .form-container select, .form-container textarea {
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+
+        .form-container button {
+            padding: 12px 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .form-container button:hover {
+            background-color: #218838;
+        }
+
+        .buttons-container {
+            display: flex;
+            justify-content: center;
         }
 
         .btn {
-            padding: 0.75rem 1.5rem;
-            font-size: 1rem;
+            padding: 10px 15px;
             border: none;
             border-radius: 4px;
+            font-size: 1rem;
             cursor: pointer;
-            transition: background-color 0.2s ease;
-        }
-
-        .btn-primary {
-            background-color: #007bff;
-            color: #fff;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
         }
 
         .btn-secondary {
             background-color: #6c757d;
-            color: #fff;
-            text-decoration: none;
-            display: inline-block;
-            margin-top: 1rem;
+            color: white;
         }
 
-        .btn-primary:hover, .btn-secondary:hover {
-            opacity: 0.9;
+        .btn-secondary:hover {
+            background-color: #5a6268;
         }
+
     </style>
 {% endblock %}

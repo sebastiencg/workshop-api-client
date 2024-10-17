@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\Fruit;
-use App\Form\FruitType;
 use App\Repository\ContinentRepository;
 use App\Repository\FruitRepository;
 use App\Repository\TypeFamilyRepository;
@@ -13,13 +12,17 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Serializer\SerializerInterface;
+use App\Attribute\RequireApiKey;
 
+#[RequireApiKey]
 #[Route('/api/fruit')]
 final class FruitController extends AbstractController
 {
     #[Route(name: 'app_fruit_index', methods: ['GET'])]
-    public function index(FruitRepository $fruitRepository): Response
+    public function index(FruitRepository $fruitRepository,Request $request): Response
     {
+        $client = $request->attributes->get('client');
+
         return $this->json($fruitRepository->findAll(),Response::HTTP_OK,[],['groups'=>'fruit:show-all']);
 
     }

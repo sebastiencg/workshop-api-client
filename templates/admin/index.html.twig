@@ -1,63 +1,87 @@
-{# templates/admin/user_list.html.twig #}
-
 {% extends 'base.html.twig' %}
 
-{% block title %}Admin - Gestion des Utilisateurs{% endblock %}
+{% block title %}Dashboard{% endblock %}
 
 {% block body %}
     <style>
-        body {
-            background-color: #f0f0f0;
+        .dashboard-page {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f9;
         }
-        .admin-table {
-            width: 80%;
-            margin: 2em auto;
-            border-collapse: collapse;
+
+        .dashboard-container {
+            width: 100%;
+            max-width: 1000px;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
         }
-        .admin-table th, .admin-table td {
-            border: 1px solid #ccc;
-            padding: 0.5em;
+
+        .dashboard-title {
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 40px;
+            font-weight: bold;
         }
-        .admin-table th {
-            background-color: #e0e0e0;
+
+        .cards-container {
+            display: flex;
+            justify-content: space-around;
+            gap: 20px;
         }
-        .admin-actions a {
-            margin-right: 0.5em;
+
+        .card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 45%;
+            padding: 30px;
+            background-color: #007bff;
+            color: white;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
             text-decoration: none;
-            color: #007bff;
+            transition: transform 0.3s ease, background-color 0.3s ease;
         }
-        .admin-actions a:hover {
-            text-decoration: underline;
+
+        .card h2 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+        }
+
+        .card p {
+            font-size: 1rem;
+            margin-bottom: 0;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            background-color: #0056b3;
         }
     </style>
 
-    <h1>Gestion des Utilisateurs</h1>
+    <div class="dashboard-page">
+        <div class="dashboard-container">
+            <h1 class="dashboard-title">Admin Dashboard</h1>
 
-    <table class="admin-table">
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Email</th>
-            <th>Actif</th>
-            <th>Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for user in users %}
-            <tr>
-                <td>{{ user.id }}</td>
-                <td>{{ user.email }}</td>
-                <td>{{ user.active ? 'Oui' : 'Non' }}</td>
-                <td class="admin-actions">
-                    <form action="{{ path('admin_user_toggle', {'id': user.id}) }}" method="post" style="display:inline;">
-                        <input type="hidden" name="_token" value="{{ csrf_token('toggle' ~ user.id) }}">
-                        <button type="submit">
-                            {{ user.active ? 'Désactiver' : 'Activer' }}
-                        </button>
-                    </form>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+            <div class="cards-container">
+                <a href="{{ path('admin_user_list') }}" class="card">
+                    <h2>Manage Users</h2>
+                    <p>View, edit, and manage user accounts.</p>
+                </a>
+
+                <a href="{{ path('app_market_place_index') }}" class="card">
+                    <h2>Market Place</h2>
+                    <p>Manage Market Places and settings.</p>
+                </a>
+            </div>
+        </div>
+    </div>
 {% endblock %}

@@ -9,6 +9,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Attribute\Route;
@@ -33,28 +34,27 @@ final class MarketPlaceController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $apiKey = bin2hex(random_bytes(16)); // Clé API de 32 caractères
-            $hashedApiKey =hash('sha256', $apiKey);
+            $hashedApiKey = hash('sha256', $apiKey);
             // Sauvegarde de la clé API hachée dans l'entité
             $marketPlace->setApiKey($hashedApiKey);
 
             // Envoi de la clé API par e-mail
             $email = (new Email())
-                ->from('noreply@test.com') //
+                ->from('noreply@api-test.com') //
                 ->to('miantamag@gmail.com') // Remplacez par l'adresse souhaitée
                 ->subject('Votre clé API')
                 ->text('Voici votre clé API : ' . $apiKey);
 
-
             try{
                 $mailer->send($email);
-            } catch(TransportExceptionInterface $error){
-                dd($error) ;
+
+
+                // Persist et flush de l'entité dans la base de données
+                $entityManager->persist($marketPlace);
+                $entityManager->flush();
+            } catch (TransportExceptionInterface $e) {
+                dd($e->getMessage());
             }
-
-            // Persist et flush de l'entité dans la base de données
-            $entityManager->persist($marketPlace);
-            $entityManager->flush();
-
             return $this->redirectToRoute('app_market_place_index', [], Response::HTTP_SEE_OTHER);
         }
 

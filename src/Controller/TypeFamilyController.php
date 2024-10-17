@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Attribute\RequireApiKey;
 use App\Entity\TypeFamily;
 use App\Form\TypeFamilyType;
 use App\Repository\TypeFamilyRepository;
@@ -12,6 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 
+#[RequireApiKey]
 #[Route('/api/family')]
 final class TypeFamilyController extends AbstractController
 {

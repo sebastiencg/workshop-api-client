@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Attribute\RequireApiKey;
 use App\Entity\Continent;
 use App\Form\ContinentType;
 use App\Repository\ContinentRepository;
@@ -11,8 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Serializer\SerializerInterface;
-
-
+#[RequireApiKey]
 #[Route('/api/continent')]
 final class ContinentController extends AbstractController
 {

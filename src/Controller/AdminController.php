@@ -11,6 +11,18 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class AdminController extends AbstractController
 {
+
+    #[Route('/admin/', name: 'admin_index')]
+    public function index(UserRepository $userRepository): Response
+    {
+        // Vérifie que l'utilisateur connecté a le rôle ADMIN
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
+        $users = $userRepository->findAll();
+
+        return $this->render('admin/index.html.twig');
+    }
+
     #[Route('/admin/users', name: 'admin_user_list')]
     public function list(UserRepository $userRepository): Response
     {
@@ -19,7 +31,7 @@ class AdminController extends AbstractController
 
         $users = $userRepository->findAll();
 
-        return $this->render('admin/index.html.twig', [
+        return $this->render('admin/user.html.twig', [
             'users' => $users,
         ]);
     }
