@@ -5,7 +5,8 @@ namespace App\EventListener;
 use App\Attribute\RequireApiKey;
 use App\Service\CheckApiKeyClientService;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 class ApiKeyListener
 {
@@ -38,7 +39,19 @@ class ApiKeyListener
             $client = $this->checkApiKeyService->checkKey($apiKey);
 
             if (!$client) {
-                throw new AccessDeniedHttpException('Clé API client invalide');
+                // Créer une réponse JSON personnalisée si la clé API est invalide
+                $response = new JsonResponse(
+                    ['message' => 'Clé API client invalide'], // Le message JSON
+                    Response::HTTP_FORBIDDEN // Code de statut HTTP 403
+                );
+
+                // Arrêter l'exécution du contrôleur et renvoyer la réponse JSON
+                $event->setController(function() use ($response) {
+                    return $response;
+                });
+
+                // Arrêter la propagation de l'événement
+                return;
             }
 
             // Optionnel : stocker l'objet client dans les attributs de la requête
@@ -46,3 +59,4 @@ class ApiKeyListener
         }
     }
 }
+
