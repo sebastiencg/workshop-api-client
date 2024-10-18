@@ -5,15 +5,15 @@
 {% block body %}
     <style>
         body {
-            background-color: #454444; /* Fond un peu noir */
-            color: #f0f0f0; /* Texte clair pour contraste */
+            background-color: #454444;
+            color: #f0f0f0;
         }
         .documentation {
             margin: 1em auto;
             max-width: 800px;
             width: 95%;
             font: 16px/1.5 sans-serif;
-            background-color: #2a2a2a; /* Fond légèrement plus clair que le body */
+            background-color: #2a2a2a;
             padding: 20px;
             color: #f0f0f0;
         }
@@ -47,9 +47,8 @@
 
         <hr>
 
-        <h2>url de base</h2>
-        <h3>https://sebastien-api.esdlyon.dev</h3>
-
+        <h2>URL de base</h2>
+        <h3>https://workshop.miantsebastien.com</h3>
 
         <h2>Table des matières</h2>
         <ol>
@@ -97,14 +96,14 @@
         <h3 id="connexion">Connexion</h3>
         <p><strong>URL</strong>: <code>/api/login_check</code></p>
         <p><strong>Méthode HTTP</strong>: <code>POST</code></p>
-        <p><strong>Description</strong>: Authentifie un utilisateur et retourne un token JWT.</p>
+        <p><strong>Description</strong>: Authentifie un utilisateur et retourne une clé API.</p>
         <p><strong>Corps de la requête</strong>:</p>
         <pre><code>{
   "username": "email_de_l_utilisateur",
   "password": "mot_de_passe"
 }</code></pre>
         <p><strong>Exemple de requête</strong>:</p>
-        <pre><code>curl -X POST http://votre-domaine.com/api/login_check \
+        <pre><code>curl -X POST https://workshop.miantsebastien.com/api/login_check \
      -H "Content-Type: application/json" \
      -d '{
            "username": "john.doe@example.com",
@@ -112,21 +111,21 @@
          }'</code></pre>
         <p><strong>Réponse réussie</strong> (HTTP 200):</p>
         <pre><code>{
-  "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9..."
+  "apiKey": "123e4567-e89b-12d3-a456-426614174000"
 }</code></pre>
 
         <!-- Inscription -->
         <h3 id="inscription">Inscription</h3>
         <p><strong>URL</strong>: <code>/register</code></p>
         <p><strong>Méthode HTTP</strong>: <code>POST</code></p>
-        <p><strong>Description</strong>: Crée un nouvel utilisateur.</p>
+        <p><strong>Description</strong>: Crée un nouvel utilisateur et retourne une clé API.</p>
         <p><strong>Corps de la requête</strong>:</p>
         <pre><code>{
   "email": "email_de_l_utilisateur",
   "password": "mot_de_passe"
 }</code></pre>
         <p><strong>Exemple de requête</strong>:</p>
-        <pre><code>curl -X POST http://votre-domaine.com/register \
+        <pre><code>curl -X POST https://workshop.miantsebastien.com/register \
      -H "Content-Type: application/json" \
      -d '{
            "email": "john.doe@example.com",
@@ -134,7 +133,8 @@
          }'</code></pre>
         <p><strong>Réponse réussie</strong> (HTTP 200):</p>
         <pre><code>{
-  "message": "user create"
+  "message": "Utilisateur créé",
+  "apiKey": "123e4567-e89b-12d3-a456-426614174000"
 }</code></pre>
         <p><strong>Erreurs possibles</strong>:</p>
         <ul>
@@ -156,7 +156,7 @@
         <p><strong>Méthode HTTP</strong>: <code>GET</code></p>
         <p><strong>Description</strong>: Récupère la liste de tous les types de famille.</p>
         <p><strong>Exemple de requête</strong>:</p>
-        <pre><code>curl -X GET http://votre-domaine.com/api/family</code></pre>
+        <pre><code>curl -X GET https://workshop.miantsebastien.com/api/family</code></pre>
         <p><strong>Réponse réussie</strong> (HTTP 200):</p>
         <pre><code>[
   {
@@ -183,15 +183,15 @@
         <p><strong>Méthode HTTP</strong>: <code>POST</code></p>
         <p><strong>Description</strong>: Crée un nouveau type de famille.</p>
         <p><strong>En-têtes requis</strong>:</p>
-        <pre><code>Authorization: Bearer {token}</code></pre>
+        <pre><code>X-API-KEY: {clé_api}</code></pre>
         <p><strong>Corps de la requête</strong>:</p>
         <pre><code>{
   "name": "Nom de la famille"
 }</code></pre>
         <p><strong>Exemple de requête</strong>:</p>
-        <pre><code>curl -X POST http://votre-domaine.com/api/family/create/new \
+        <pre><code>curl -X POST https://workshop.miantsebastien.com/api/family/create/new \
      -H "Content-Type: application/json" \
-     -H "Authorization: Bearer votre_token_jwt" \
+     -H "X-API-KEY: votre_clé_api" \
      -d '{
            "name": "Famille C"
          }'</code></pre>
@@ -208,7 +208,7 @@
         <ul>
             <li><strong>400 Bad Request</strong>: Si le champ <code>name</code> est vide.
                 <pre><code>{
-  "message": "name must not be empty"
+  "message": "Le nom ne doit pas être vide"
 }</code></pre>
             </li>
         </ul>
@@ -219,7 +219,7 @@
         <p><strong>Méthode HTTP</strong>: <code>GET</code></p>
         <p><strong>Description</strong>: Récupère les détails d'un type de famille spécifique.</p>
         <p><strong>Exemple de requête</strong>:</p>
-        <pre><code>curl -X GET http://votre-domaine.com/api/family/1</code></pre>
+        <pre><code>curl -X GET https://workshop.miantsebastien.com/api/family/1</code></pre>
         <p><strong>Réponse réussie</strong> (HTTP 200):</p>
         <pre><code>{
   "id": 1,
@@ -236,15 +236,15 @@
         <p><strong>Méthode HTTP</strong>: <code>POST</code></p>
         <p><strong>Description</strong>: Modifie un type de famille existant.</p>
         <p><strong>En-têtes requis</strong>:</p>
-        <pre><code>Authorization: Bearer {token}</code></pre>
+        <pre><code>X-API-KEY: {clé_api}</code></pre>
         <p><strong>Corps de la requête</strong>:</p>
         <pre><code>{
   "name": "Nouveau nom de la famille"
 }</code></pre>
         <p><strong>Exemple de requête</strong>:</p>
-        <pre><code>curl -X POST http://votre-domaine.com/api/family/1/edit \
+        <pre><code>curl -X POST https://workshop.miantsebastien.com/api/family/1/edit \
      -H "Content-Type: application/json" \
-     -H "Authorization: Bearer votre_token_jwt" \
+     -H "X-API-KEY: votre_clé_api" \
      -d '{
            "name": "Famille A Modifiée"
          }'</code></pre>
@@ -259,9 +259,9 @@
 }</code></pre>
         <p><strong>Erreurs possibles</strong>:</p>
         <ul>
-            <li><strong>400 Bad Request</strong>: Si l'utilisateur n'a pas l'autorisation de modifier ce type de famille.
+            <li><strong>403 Forbidden</strong>: Si l'utilisateur n'a pas l'autorisation de modifier ce type de famille.
                 <pre><code>{
-  "message": "internal error"
+  "message": "Accès non autorisé"
 }</code></pre>
             </li>
         </ul>
@@ -269,16 +269,16 @@
         <!-- Supprimer un type de famille -->
         <h3 id="supprimer-un-type-de-famille">Supprimer un type de famille</h3>
         <p><strong>URL</strong>: <code>/api/family/{id}</code></p>
-        <p><strong>Méthode HTTP</strong>: <code>POST</code></p>
+        <p><strong>Méthode HTTP</strong>: <code>DELETE</code></p>
         <p><strong>Description</strong>: Supprime un type de famille.</p>
         <p><strong>En-têtes requis</strong>:</p>
-        <pre><code>Authorization: Bearer {token}</code></pre>
+        <pre><code>X-API-KEY: {clé_api}</code></pre>
         <p><strong>Exemple de requête</strong>:</p>
-        <pre><code>curl -X POST http://votre-domaine.com/api/family/1 \
-     -H "Authorization: Bearer votre_token_jwt"</code></pre>
-        <p><strong>Réponse réussie</strong> (HTTP 400):</p>
+        <pre><code>curl -X DELETE https://workshop.miantsebastien.com/api/family/1 \
+     -H "X-API-KEY: votre_clé_api"</code></pre>
+        <p><strong>Réponse réussie</strong> (HTTP 200):</p>
         <pre><code>{
-  "message": "values deleted"
+  "message": "Type de famille supprimé"
 }</code></pre>
 
         <hr>
@@ -292,7 +292,7 @@
         <p><strong>Méthode HTTP</strong>: <code>GET</code></p>
         <p><strong>Description</strong>: Récupère la liste de tous les fruits.</p>
         <p><strong>Exemple de requête</strong>:</p>
-        <pre><code>curl -X GET http://votre-domaine.com/api/fruit</code></pre>
+        <pre><code>curl -X GET https://workshop.miantsebastien.com/api/fruit</code></pre>
         <p><strong>Réponse réussie</strong> (HTTP 200):</p>
         <pre><code>[
   {
@@ -324,7 +324,7 @@
         <p><strong>Méthode HTTP</strong>: <code>POST</code></p>
         <p><strong>Description</strong>: Crée un nouveau fruit.</p>
         <p><strong>En-têtes requis</strong>:</p>
-        <pre><code>Authorization: Bearer {token}</code></pre>
+        <pre><code>X-API-KEY: {clé_api}</code></pre>
         <p><strong>Corps de la requête</strong>:</p>
         <pre><code>{
   "name": "Nom du fruit",
@@ -333,9 +333,9 @@
   "families": [1]
 }</code></pre>
         <p><strong>Exemple de requête</strong>:</p>
-        <pre><code>curl -X POST http://votre-domaine.com/api/fruit/create/new \
+        <pre><code>curl -X POST https://workshop.miantsebastien.com/api/fruit/create/new \
      -H "Content-Type: application/json" \
-     -H "Authorization: Bearer votre_token_jwt" \
+     -H "X-API-KEY: votre_clé_api" \
      -d '{
            "name": "Banane",
            "color": "Jaune",
@@ -372,7 +372,7 @@
         <ul>
             <li><strong>400 Bad Request</strong>: Si le fruit est vide ou si les continents/familles fournis ne sont pas trouvés.
                 <pre><code>{
-  "message": "name must not be empty"
+  "message": "Le nom du fruit ne doit pas être vide"
 }</code></pre>
             </li>
         </ul>
@@ -383,36 +383,7 @@
         <p><strong>Méthode HTTP</strong>: <code>GET</code></p>
         <p><strong>Description</strong>: Récupère les détails d'un fruit spécifique.</p>
         <p><strong>Exemple de requête</strong>:</p>
-        <pre><code>curl -X GET http://votre-domaine.com/api/fruit/1</code></pre>
-        <p><strong>Réponse réussie</strong> (HTTP 200):</p>
-        <pre><code>{
-  "id": 1,
-  "name": "Pomme",
-  "color": "Rouge",
-  "ofUser": {
-    "id": 1,
-    "email": "john.doe@example.com"
-  },
-  "continents": [
-    {
-      "id": 1,
-      "name": "Europe"
-    }
-  ],
-  "families": [
-    {
-      "id": 1,
-      "name": "Rosaceae"
-    }
-  ]
-}</code></pre>
-        <!-- rechercher un fruit -->
-        <h3 id="afficher-un-fruit">rechercher un fruit</h3>
-        <p><strong>URL</strong>: <code>/api/fruit/search/?name=pomme</code></p>
-        <p><strong>Méthode HTTP</strong>: <code>GET</code></p>
-        <p><strong>Description</strong>: Rechercher un fruit spécifique.</p>
-        <p><strong>Exemple de requête</strong>:</p>
-        <pre><code>curl -X GET http://votre-domaine.com/api/fruit/search?name=pomme</code></pre>
+        <pre><code>curl -X GET https://workshop.miantsebastien.com/api/fruit/1</code></pre>
         <p><strong>Réponse réussie</strong> (HTTP 200):</p>
         <pre><code>{
   "id": 1,
@@ -436,22 +407,54 @@
   ]
 }</code></pre>
 
+        <!-- Rechercher un fruit -->
+        <h3 id="rechercher-un-fruit">Rechercher un fruit</h3>
+        <p><strong>URL</strong>: <code>/api/fruit/search?name=pomme</code></p>
+        <p><strong>Méthode HTTP</strong>: <code>GET</code></p>
+        <p><strong>Description</strong>: Recherche un fruit spécifique par nom.</p>
+        <p><strong>Exemple de requête</strong>:</p>
+        <pre><code>curl -X GET https://workshop.miantsebastien.com/api/fruit/search?name=pomme</code></pre>
+        <p><strong>Réponse réussie</strong> (HTTP 200):</p>
+        <pre><code>[
+  {
+    "id": 1,
+    "name": "Pomme",
+    "color": "Rouge",
+    "ofUser": {
+      "id": 1,
+      "email": "john.doe@example.com"
+    },
+    "continents": [
+      {
+        "id": 1,
+        "name": "Europe"
+      }
+    ],
+    "families": [
+      {
+        "id": 1,
+        "name": "Rosaceae"
+      }
+    ]
+  }
+]</code></pre>
+
         <!-- Modifier un fruit -->
         <h3 id="modifier-un-fruit">Modifier un fruit</h3>
         <p><strong>URL</strong>: <code>/api/fruit/{id}/edit</code></p>
         <p><strong>Méthode HTTP</strong>: <code>POST</code></p>
         <p><strong>Description</strong>: Modifie un fruit existant.</p>
         <p><strong>En-têtes requis</strong>:</p>
-        <pre><code>Authorization: Bearer {token}</code></pre>
+        <pre><code>X-API-KEY: {clé_api}</code></pre>
         <p><strong>Corps de la requête</strong>:</p>
         <pre><code>{
   "name": "Nouveau nom du fruit",
   "color": "Nouvelle couleur du fruit"
 }</code></pre>
         <p><strong>Exemple de requête</strong>:</p>
-        <pre><code>curl -X POST http://votre-domaine.com/api/fruit/1/edit \
+        <pre><code>curl -X POST https://workshop.miantsebastien.com/api/fruit/1/edit \
      -H "Content-Type: application/json" \
-     -H "Authorization: Bearer votre_token_jwt" \
+     -H "X-API-KEY: votre_clé_api" \
      -d '{
            "name": "Pomme Verte",
            "color": "Vert"
@@ -470,9 +473,9 @@
 }</code></pre>
         <p><strong>Erreurs possibles</strong>:</p>
         <ul>
-            <li><strong>400 Bad Request</strong>: Si l'utilisateur n'a pas l'autorisation de modifier ce fruit ou si les données fournies sont invalides.
+            <li><strong>403 Forbidden</strong>: Si l'utilisateur n'a pas l'autorisation de modifier ce fruit ou si les données fournies sont invalides.
                 <pre><code>{
-  "message": "no authorization"
+  "message": "Accès non autorisé"
 }</code></pre>
             </li>
         </ul>
@@ -480,16 +483,16 @@
         <!-- Supprimer un fruit -->
         <h3 id="supprimer-un-fruit">Supprimer un fruit</h3>
         <p><strong>URL</strong>: <code>/api/fruit/{id}</code></p>
-        <p><strong>Méthode HTTP</strong>: <code>POST</code></p>
+        <p><strong>Méthode HTTP</strong>: <code>DELETE</code></p>
         <p><strong>Description</strong>: Supprime un fruit.</p>
         <p><strong>En-têtes requis</strong>:</p>
-        <pre><code>Authorization: Bearer {token}</code></pre>
+        <pre><code>X-API-KEY: {clé_api}</code></pre>
         <p><strong>Exemple de requête</strong>:</p>
-        <pre><code>curl -X POST http://votre-domaine.com/api/fruit/1 \
-     -H "Authorization: Bearer votre_token_jwt"</code></pre>
-        <p><strong>Réponse réussie</strong> (HTTP 400):</p>
+        <pre><code>curl -X DELETE https://workshop.miantsebastien.com/api/fruit/1 \
+     -H "X-API-KEY: votre_clé_api"</code></pre>
+        <p><strong>Réponse réussie</strong> (HTTP 200):</p>
         <pre><code>{
-  "message": "values deleted"
+  "message": "Fruit supprimé"
 }</code></pre>
 
         <hr>
@@ -503,7 +506,7 @@
         <p><strong>Méthode HTTP</strong>: <code>GET</code></p>
         <p><strong>Description</strong>: Récupère la liste de tous les continents.</p>
         <p><strong>Exemple de requête</strong>:</p>
-        <pre><code>curl -X GET http://votre-domaine.com/api/continent</code></pre>
+        <pre><code>curl -X GET https://workshop.miantsebastien.com/api/continent</code></pre>
         <p><strong>Réponse réussie</strong> (HTTP 200):</p>
         <pre><code>[
   {
@@ -530,15 +533,15 @@
         <p><strong>Méthode HTTP</strong>: <code>POST</code></p>
         <p><strong>Description</strong>: Crée un nouveau continent.</p>
         <p><strong>En-têtes requis</strong>:</p>
-        <pre><code>Authorization: Bearer {token}</code></pre>
+        <pre><code>X-API-KEY: {clé_api}</code></pre>
         <p><strong>Corps de la requête</strong>:</p>
         <pre><code>{
   "name": "Nom du continent"
 }</code></pre>
         <p><strong>Exemple de requête</strong>:</p>
-        <pre><code>curl -X POST http://votre-domaine.com/api/continent/create/new \
+        <pre><code>curl -X POST https://workshop.miantsebastien.com/api/continent/create/new \
      -H "Content-Type: application/json" \
-     -H "Authorization: Bearer votre_token_jwt" \
+     -H "X-API-KEY: votre_clé_api" \
      -d '{
            "name": "Asie"
          }'</code></pre>
@@ -555,7 +558,7 @@
         <ul>
             <li><strong>400 Bad Request</strong>: Si le champ <code>name</code> est vide.
                 <pre><code>{
-  "message": "name must not be empty"
+  "message": "Le nom ne doit pas être vide"
 }</code></pre>
             </li>
         </ul>
@@ -566,7 +569,7 @@
         <p><strong>Méthode HTTP</strong>: <code>GET</code></p>
         <p><strong>Description</strong>: Récupère les détails d'un continent spécifique.</p>
         <p><strong>Exemple de requête</strong>:</p>
-        <pre><code>curl -X GET http://votre-domaine.com/api/continent/1</code></pre>
+        <pre><code>curl -X GET https://workshop.miantsebastien.com/api/continent/1</code></pre>
         <p><strong>Réponse réussie</strong> (HTTP 200):</p>
         <pre><code>{
   "id": 1,
@@ -580,18 +583,18 @@
         <!-- Modifier un continent -->
         <h3 id="modifier-un-continent">Modifier un continent</h3>
         <p><strong>URL</strong>: <code>/api/continent/{id}/edit</code></p>
-        <p><strong>Méthode HTTP</strong>: <code>PUT</code> ou <code>PATCH</code></p>
+        <p><strong>Méthode HTTP</strong>: <code>POST</code></p>
         <p><strong>Description</strong>: Modifie un continent existant.</p>
         <p><strong>En-têtes requis</strong>:</p>
-        <pre><code>Authorization: Bearer {token}</code></pre>
+        <pre><code>X-API-KEY: {clé_api}</code></pre>
         <p><strong>Corps de la requête</strong>:</p>
         <pre><code>{
   "name": "Nouveau nom du continent"
 }</code></pre>
         <p><strong>Exemple de requête</strong>:</p>
-        <pre><code>curl -X PUT http://votre-domaine.com/api/continent/1/edit \
+        <pre><code>curl -X POST https://workshop.miantsebastien.com/api/continent/1/edit \
      -H "Content-Type: application/json" \
-     -H "Authorization: Bearer votre_token_jwt" \
+     -H "X-API-KEY: votre_clé_api" \
      -d '{
            "name": "Afrique Modifiée"
          }'</code></pre>
@@ -606,9 +609,9 @@
 }</code></pre>
         <p><strong>Erreurs possibles</strong>:</p>
         <ul>
-            <li><strong>400 Bad Request</strong>: Si l'utilisateur n'a pas l'autorisation de modifier ce continent.
+            <li><strong>403 Forbidden</strong>: Si l'utilisateur n'a pas l'autorisation de modifier ce continent.
                 <pre><code>{
-  "message": "no authorization"
+  "message": "Accès non autorisé"
 }</code></pre>
             </li>
         </ul>
@@ -619,24 +622,24 @@
         <p><strong>Méthode HTTP</strong>: <code>DELETE</code></p>
         <p><strong>Description</strong>: Supprime un continent.</p>
         <p><strong>En-têtes requis</strong>:</p>
-        <pre><code>Authorization: Bearer {token}</code></pre>
+        <pre><code>X-API-KEY: {clé_api}</code></pre>
         <p><strong>Exemple de requête</strong>:</p>
-        <pre><code>curl -X DELETE http://votre-domaine.com/api/continent/1 \
-     -H "Authorization: Bearer votre_token_jwt"</code></pre>
-        <p><strong>Réponse réussie</strong> (HTTP 400):</p>
+        <pre><code>curl -X DELETE https://workshop.miantsebastien.com/api/continent/1 \
+     -H "X-API-KEY: votre_clé_api"</code></pre>
+        <p><strong>Réponse réussie</strong> (HTTP 200):</p>
         <pre><code>{
-  "message": "values deleted"
+  "message": "Continent supprimé"
 }</code></pre>
 
         <hr>
 
-        <p><strong>Note</strong>: Pour toutes les routes nécessitant une authentification, assurez-vous de fournir le token JWT obtenu lors de la connexion dans l'en-tête <code>Authorization</code> sous la forme <code>Bearer {token}</code>.</p>
+        <p><strong>Note</strong>: Pour toutes les routes nécessitant une authentification, assurez-vous de fournir votre clé API obtenue lors de la connexion ou de l'inscription dans l'en-tête <code>X-API-KEY</code>.</p>
 
-        <p>Exemple d'utilisation de l'en-tête d'autorisation:</p>
-        <pre><code>-H "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9..."</code></pre>
+        <p>Exemple d'utilisation de l'en-tête de clé API:</p>
+        <pre><code>-H "X-API-KEY: 123e4567-e89b-12d3-a456-426614174000"</code></pre>
 
         <hr>
 
-        <p>Cette documentation vous fournit les informations nécessaires pour interagir avec votre API Symfony, y compris des exemples de requêtes et de réponses pour chaque endpoint. N'oubliez pas de remplacer <code>sebastien-api.esdlyon.dev</code> par le domaine réel de votre application et d'utiliser les identifiants et tokens appropriés.</p>
+        <p>Cette documentation vous fournit les informations nécessaires pour interagir avec votre API Symfony, y compris des exemples de requêtes et de réponses pour chaque endpoint. N'oubliez pas d'utiliser l'URL de base <code>https://workshop.miantsebastien.com</code> et d'utiliser les identifiants et clés API appropriés.</p>
     </div>
 {% endblock %}
