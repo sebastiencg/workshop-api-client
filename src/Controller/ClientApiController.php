@@ -49,6 +49,9 @@ class ClientApiController extends AbstractController
         if (!isset($data['uuid'])) {
             return $this->json(['message' => "uuid no send"], Response::HTTP_BAD_REQUEST);
         }
+        if (!isset($data['client_id'])) {
+            return $this->json(['message' => "client-id no send"], Response::HTTP_BAD_REQUEST);
+        }
         //client_id
         $checkUuid= Uuid::isValid($data['uuid']);
         if (!$checkUuid) {
@@ -63,6 +66,8 @@ class ClientApiController extends AbstractController
         $client->setRequestQuota($client->getTotalRequest());
         $client->setUuid($uuid);
         $client->setOfMarketPlace($marketPlace);
+        $client->setClientId($data['client_id']);
+
 
         $entityManager->persist($client);
         $entityManager->flush();

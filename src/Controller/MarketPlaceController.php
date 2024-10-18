@@ -40,7 +40,7 @@ final class MarketPlaceController extends AbstractController
 
             // Envoi de la clé API par e-mail
             $email = (new Email())
-                ->from('noreply@api-test.com') //
+                ->from('student-apps@esdlyon.dev') //
                 ->to('miantamag@gmail.com') // Remplacez par l'adresse souhaitée
                 ->subject('Votre clé API')
                 ->text('Voici votre clé API : ' . $apiKey);

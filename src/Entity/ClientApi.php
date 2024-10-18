@@ -40,6 +40,9 @@ class ClientApi
     #[ORM\ManyToOne(inversedBy: 'clientApis')]
     private ?MarketPlace $ofMarketPlace = null;
 
+    #[ORM\Column]
+    private ?int $clientId = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -113,6 +116,18 @@ class ClientApi
     public function setOfMarketPlace(?MarketPlace $ofMarketPlace): static
     {
         $this->ofMarketPlace = $ofMarketPlace;
+
+        return $this;
+    }
+
+    public function getClientId(): ?int
+    {
+        return $this->clientId;
+    }
+
+    public function setClientId(int $clientId): static
+    {
+        $this->clientId = $clientId;
 
         return $this;
     }
